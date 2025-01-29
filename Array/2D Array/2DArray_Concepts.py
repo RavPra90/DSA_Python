@@ -78,5 +78,9 @@ def searchTDArray(array, value):
 print(searchTDArray(twoDArray, 12))  #Output: The value is located index 2 0
 
 #DELETION
+"""
+Time Complexity : O(mn)
+Space Complexity : O(mn)
+"""
 newTDArray = np.delete(twoDArray, 1, axis=1)
 print(newTDArray)
