@@ -18,9 +18,11 @@ class Linked_List:
         self.tail = None  # Points to the last node (None means the list is empty)
         self.length = 0   # Keeps track of the number of nodes in the list
 
-
-
-    # Description: Returns a string representation of the linked list in a readable format.
+    """
+        __str__:
+        Returns a string representation of the list.
+        It traverses the list from head to tail and joins the node values with " <-> ".
+        """
     def __str__(self):
         tempNode = self.head  # Start from the head node
         result = ''  # String to store the output representation of the linked list
@@ -45,6 +47,7 @@ class Linked_List:
             new_node.next = self.head  # Link new node to the current head
             self.head = new_node  # Update the head to the new node
         self.length += 1  # Increase the length of the list
+
     """
      Description: Inserts a node at a specific index in the list.
      If the index is invalid (less than 0 or greater than the list length), it returns False.
