@@ -1,8 +1,17 @@
 # Creating a Node class to represent each element (node) in the linked list
-from numpy.f2py.crackfortran import traverse  # Imported but not used in this code
-
-
 class Node:
+    """
+    __init__:
+    Initializes a new node with the provided value.
+
+    Parameters:
+      value: The value to be stored in the node.
+
+    Attributes:
+      value: Stores the given value.
+      next: Pointer to the next node (initially None).
+    """
+
     def __init__(self, value):
         self.value = value  # Store the given value in the node
         self.next = None  # Pointer to the next node; initially there is no next node
@@ -10,15 +19,28 @@ class Node:
 
 # Creating a Linked List class to manage multiple nodes
 class Linked_List:
-    # Initializing the linked list constructor
+    """
+    __init__:
+    Initializes an empty linked list.
+
+    Attributes:
+      head: Points to the first node (None means the list is empty).
+      tail: Points to the last node (None means the list is empty).
+      length: Tracks the number of nodes in the list.
+    """
+
     def __init__(self):
-        self.head = None  # Points to the first node (None means the list is empty)
-        self.tail = None  # Points to the last node (None means the list is empty)
-        self.length = 0  # Keeps track of the number of nodes in the list
+        self.head = None  # Points to the first node in the list (empty initially)
+        self.tail = None  # Points to the last node in the list (empty initially)
+        self.length = 0  # Initially, there are zero nodes in the list
 
+    """
+    __str__:
+    Returns a string representation of the linked list.
 
+    Format Example: "10 -> 20 -> 30"
+    """
 
-    # This method returns a string representation of the list (e.g., "10 -> 20 -> 30")
     def __str__(self):
         tempNode = self.head  # Start from the head (first node)
         result = ''  # This string will accumulate the values of nodes
@@ -29,12 +51,21 @@ class Linked_List:
             tempNode = tempNode.next  # Move to the next node in the list
         return result  # Return the complete string representation of the list
 
+    """
+    append:
+    Inserts a new node with the provided value at the end of the linked list.
 
+    Process:
+      - If the list is empty, the new node becomes both the head and tail.
+      - Otherwise, the new node is linked after the current tail, and the tail is updated.
 
-    # Insert a node at the end of the list
+    Parameters:
+      value: The value to be added.
+    """
+
     def append(self, value):
         new_node = Node(value)  # Create a new node with the provided value
-        if self.head is None:  # If the list is empty, set both head and tail to this node
+        if self.head is None:  # If the list is empty, make the new node both head and tail
             self.head = new_node
             self.tail = new_node
         else:
@@ -42,9 +73,19 @@ class Linked_List:
             self.tail = new_node  # Update the tail to be the new node
         self.length += 1  # Increase the count of nodes in the list
 
+    """
+    pop_first:
+    Removes and returns the first node's value from the linked list.
 
+    Process:
+      - If the list is empty, returns None.
+      - If there's only one node, empties the list.
+      - Otherwise, updates the head to the next node and disconnects the removed node.
 
-    # Remove and return the first node's value
+    Returns:
+      The value of the removed node.
+    """
+
     def pop_first(self):
         if self.length == 0:  # If the list is empty, there's nothing to remove
             return None
@@ -60,9 +101,20 @@ class Linked_List:
         self.length -= 1  # Decrease the count of nodes
         return popped_node.value  # Return the value of the removed node
 
+    """
+    pop:
+    Removes and returns the last node's value from the linked list.
 
+    Process:
+      - If the list is empty, returns None.
+      - If there's only one node, empties the list.
+      - Otherwise, traverses the list to find the node just before the tail, updates the tail,
+        and disconnects the removed node.
 
-    # Remove and return the last node's value
+    Returns:
+      The value of the removed node.
+    """
+
     def pop(self):
         if self.length == 0:
             return None
@@ -80,22 +132,49 @@ class Linked_List:
         self.length -= 1  # Decrease the count of nodes
         return popped_node.value  # Return the value of the removed node
 
+    """
+    get:
+    Retrieves the node at a specified index in the linked list.
 
+    Parameters:
+      index: The position of the node to retrieve. Use -1 to get the last node.
 
-    # Get the node at a specified index (use -1 to get the last node)
+    Returns:
+      The node at the specified index if it exists, otherwise None.
+
+    Process:
+      - If index is -1, returns the tail node.
+      - If index is out of range, returns None.
+      - Otherwise, traverses from the head to the specified index.
+    """
+
     def get(self, index):
         if index == -1:  # Special case: if index is -1, return the tail node
             return self.tail
         if index < -1 or index >= self.length:
-            return None  # Return None if index is out of range
+            return None  # Return None if index is out of valid range
         current = self.head
         for _ in range(index):
-            current = current.next  # Move to the next node until the index is reached
+            current = current.next  # Move through the list until reaching the desired index
         return current  # Return the node at the specified index
 
+    """
+    remove:
+    Removes a node at a specific index from the linked list.
 
+    Parameters:
+      index: The position of the node to remove. Use -1 to remove the last node.
 
-    # Remove a node at a specific index and return its value
+    Process:
+      - If the index is out of range, returns None.
+      - If the index is 0, removes the first node.
+      - If the index is the last element (or -1), removes the last node.
+      - Otherwise, removes the node in the middle and adjusts pointers accordingly.
+
+    Returns:
+      The value of the removed node, if removal is successful.
+    """
+
     def remove(self, index):
         # Check if the index is out of range (-1 represents the last element)
         if index >= self.length or index < -1:
@@ -107,13 +186,20 @@ class Linked_List:
         # For removal in the middle:
         prev_node = self.get(index - 1)  # Get the node just before the one to remove
         popped_node = prev_node.next  # The node to be removed
-        prev_node.next = popped_node.next  # Link the previous node to the node after the one removed
+        prev_node.next = popped_node.next  # Link the previous node to the node after the removed node
         popped_node.next = None  # Disconnect the removed node
         self.length -= 1  # Decrease the node count
+        return popped_node.value  # Return the value of the removed node
 
+    """
+    delete_all:
+    Deletes all nodes in the linked list, effectively resetting it to empty.
 
+    Process:
+      - Removes references to the head and tail.
+      - Resets the node count to zero.
+    """
 
-    # Delete all nodes in the list (reset the list to empty)
     def delete_all(self):
         self.head = None  # Remove reference to the first node
         self.tail = None  # Remove reference to the last node
@@ -126,7 +212,7 @@ class Linked_List:
 if __name__ == '__main__':
     # Create a new linked list instance
     ll = Linked_List()
-    print("Initial list (should be empty):", ll)
+    print("Initial list (should be empty):", ll)  # Expected output: (empty string)
 
     # Scenario 1: Append nodes to the list
     ll.append(10)
@@ -134,19 +220,19 @@ if __name__ == '__main__':
     ll.append(30)
     ll.append(40)
     print("List after appending 10, 20, 30, 40:", ll)
-    # Expected output: 10 -> 20 -> 30 -> 40
+    # Expected output: "10 -> 20 -> 30 -> 40"
 
     # Scenario 2: Remove the first element
     popped_first = ll.pop_first()
     print("Popped first element (should be 10):", popped_first)
     print("List after popping first element:", ll)
-    # Expected output: 20 -> 30 -> 40
+    # Expected output: "20 -> 30 -> 40"
 
     # Scenario 3: Remove the last element
     popped_last = ll.pop()
     print("Popped last element (should be 40):", popped_last)
     print("List after popping last element:", ll)
-    # Expected output: 20 -> 30
+    # Expected output: "20 -> 30"
 
     # Scenario 4: Get the node at index 1 (should be the node with value 30)
     node_at_index = ll.get(1)
@@ -159,17 +245,17 @@ if __name__ == '__main__':
     removed_value = ll.remove(0)
     print("Removed element at index 0 (should be 20):", removed_value)
     print("List after removing element at index 0:", ll)
-    # Expected output: 30
+    # Expected output: "30"
 
     # Scenario 6: Append more values to test removal using index -1 (removes last element)
     ll.append(50)
     ll.append(60)
     print("List after appending 50 and 60:", ll)
-    # Expected output: 30 -> 50 -> 60
+    # Expected output: "30 -> 50 -> 60"
     removed_last = ll.remove(-1)  # Remove the last element using -1 as index
     print("Removed element at index -1 (should be 60):", removed_last)
     print("List after removing element at index -1:", ll)
-    # Expected output: 30 -> 50
+    # Expected output: "30 -> 50"
 
     # Scenario 7: Delete all nodes from the list
     ll.delete_all()
